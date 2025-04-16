@@ -43,7 +43,6 @@ for (i = 0; i < acc.length; i++) {
 // remove this part below kalo gk mau the zoom thingy 
 document.addEventListener("DOMContentLoaded", function () {
   const map = document.querySelector(".mapContainer");
-  const zoomWrapper = document.querySelector(".zoomWrapper");
   const zooMap = document.getElementById("zooMap");
   const routeOverlays = document.querySelectorAll(".routeOverlay");
 
@@ -52,25 +51,26 @@ document.addEventListener("DOMContentLoaded", function () {
   const minZoom = 1;
   const maxZoom = 3;
 
-  
-  map.addEventListener(
-    "wheel",
-    function (event) {
-      if (event.ctrlKey) {
-        event.preventDefault();
+  map.addEventListener("wheel", function (event) {
+    if (event.ctrlKey) {
+      event.preventDefault();
 
-        if (event.deltaY < 0) {
-          currentZoom += inc;
-          if (currentZoom > maxZoom) currentZoom = maxZoom;
-        } else {
-          currentZoom -= inc;
-          if (currentZoom < minZoom) currentZoom = minZoom;
-        }
-
-        zoomWrapper.style.transform = `scale(${currentZoom})`;
-        zoomWrapper.style.transformOrigin = "top left";
+      if (event.deltaY < 0) {
+        currentZoom += inc;
+        if (currentZoom > maxZoom) currentZoom = maxZoom;
+      } else {
+        currentZoom -= inc;
+        if (currentZoom < minZoom) currentZoom = minZoom;
       }
-    },
-    { passive: false }
-  );
+
+      const updatedWidth = currentZoom * 100 + "%";
+
+      zooMap.style.width = updatedWidth;
+      
+      routeOverlays.forEach(function (overlayItem) {
+        overlayItem.style.width = updatedWidth;
+      });
+    }
+  }, { passive: false });
 });
+
